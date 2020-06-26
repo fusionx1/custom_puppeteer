@@ -38,21 +38,21 @@ class Source {
   }
 
   /**
-   * @returns {string}
+   * @return {string}
    */
   filePath() {
     return this._filePath;
   }
 
   /**
-   * @returns {string}
+   * @return {string}
    */
   projectPath() {
     return this._projectPath;
   }
 
   /**
-   * @returns {string}
+   * @return {string}
    */
   name() {
     return this._name;
@@ -60,24 +60,25 @@ class Source {
 
   /**
    * @param {string} text
-   * @returns {boolean}
+   * @return {boolean}
    */
   setText(text) {
-    if (text === this._text) return false;
+    if (text === this._text)
+      return false;
     this._hasUpdatedText = true;
     this._text = text;
     return true;
   }
 
   /**
-   * @returns {string}
+   * @return {string}
    */
   text() {
     return this._text;
   }
 
   /**
-   * @returns {boolean}
+   * @return {boolean}
    */
   hasUpdatedText() {
     return this._hasUpdatedText;
@@ -89,29 +90,24 @@ class Source {
 
   /**
    * @param {string} filePath
-   * @returns {!Promise<Source>}
+   * @return {!Promise<Source>}
    */
   static async readFile(filePath) {
     filePath = path.resolve(filePath);
-    const text = await readFileAsync(filePath, { encoding: 'utf8' });
+    const text = await readFileAsync(filePath, {encoding: 'utf8'});
     return new Source(filePath, text);
   }
 
   /**
    * @param {string} dirPath
    * @param {string=} extension
-   * @returns {!Promise<!Array<!Source>>}
+   * @return {!Promise<!Array<!Source>>}
    */
   static async readdir(dirPath, extension = '') {
     const fileNames = await readdirAsync(dirPath);
-    const filePaths = fileNames
-      .filter((fileName) => fileName.endsWith(extension))
-      .map((fileName) => path.join(dirPath, fileName))
-      .filter((filePath) => {
-        const stats = fs.lstatSync(filePath);
-        return stats.isDirectory() === false;
-      });
-    return Promise.all(filePaths.map((filePath) => Source.readFile(filePath)));
+    const filePaths = fileNames.filter(fileName => fileName.endsWith(extension)).map(fileName => path.join(dirPath, fileName));
+    return Promise.all(filePaths.map(filePath => Source.readFile(filePath)));
   }
 }
 module.exports = Source;
+
